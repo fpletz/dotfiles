@@ -1,0 +1,7 @@
+Urxvt*depth: 32
+URxvt*background: rgba:0000/0000/0000/9999
+URxvt*foreground: #ddd
+URxvt*scrollBar: False
+URxvt*font: -*-fixed-*-*-*-*-12-*-*-*-*-*-*-*
+URxvt*saveLines: 2000
+URxvt*urlLauncher: x-www-browser
