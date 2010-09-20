@@ -168,7 +168,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
                                         else xmobarColor "#777" "" wsId
                        , ppSep             = xmobarColor "#666" "" "]["
                        , ppUrgent	   = xmobarColor "#fff" "" . \wsId -> wsId ++ "*"
-                       , ppTitle           = shorten 60
+                       , ppTitle           = shorten 45
                        , ppWsSep           = xmobarColor "#666" "" "|"
                        , ppLayout          = xmobarColor "#15d" "" . (\x -> pad $ case x of
                                                 "Full"                 -> "F"
