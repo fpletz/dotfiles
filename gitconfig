@@ -1,0 +1,32 @@
+[user]
+    name = Franz Pletz
+    email = fpletz@fnordicwalking.de
+    signingkey = 792617B4
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = true
+    pager = true
+
+[core]
+    pager = less -FRX
+    whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+
+[rerere]
+    enabled = true
+
+[pack]
+    threads = 2
+
+[url "git@github.com:fpletz/"]
+    insteadOf = github:
+
+[web]
+    browser = /usr/bin/chromium-browser
