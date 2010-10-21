@@ -30,12 +30,13 @@ import XMonad.Prompt.XMonad
 import XMonad.Prompt.RunOrRaise
 
 import XMonad.Actions.CycleWS
+import XMonad.Actions.UpdatePointer
 
 import XMonad.Util.Run
 import XMonad.Util.Scratchpad
 
 import XMonad.Actions.NoBorders
-import XMonad.Actions.DynamicWorkspaces 
+import XMonad.Actions.DynamicWorkspaces
 import qualified XMonad.Actions.FlexibleResize as Flex
 
 import XMonad.Layout.WindowArranger
@@ -65,7 +66,7 @@ evHook (ClientMessageEvent _ _ _ dpy win typ dat) = do
       toggle = 2
 
       -- The ATOM property type for changeProperty
-      ptype = 4 
+      ptype = 4
 
       action = head dat
 
@@ -96,13 +97,14 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
        , normalBorderColor  = "#ccc"
        , focusedBorderColor = "#05c"
        , focusFollowsMouse  = True
-       , logHook            = dynamicLogWithPP $ myPP h
+       , logHook            = (dynamicLogWithPP $ myPP h) >>
+				updatePointer (Relative 0.5 0.5)
        , keys               = \c -> myKeys c `M.union` keys defaultConfig c
        , mouseBindings      = myMouseBindings
        , manageHook         = manageDocks <+> manageHook defaultConfig <+> myManageHook
        , layoutHook         = myLayouts
        , handleEventHook    = evHook
-       , startupHook        = setWMName "LG3D" 
+       , startupHook        = setWMName "LG3D"
        }
   where
     myKeys (XConfig {modMask = modm}) = M.fromList $
@@ -185,7 +187,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
            -- $ onWorkspace "im" (IM (1%6) (Role "roster"))
               $ onWorkspaces ["www","@","m"] (Full ||| tabbedLayout)
               $ (dwmLayout $ tiled ||| Mirror tiled) ||| Full ||| gimpLayout
-            where 
+            where
                  tiled   = Tall nmaster delta ratio
                  nmaster = 1
                  delta   = 3/100
