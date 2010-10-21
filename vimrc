@@ -1,6 +1,8 @@
 set nocompatible
-set background=dark
+"set background=dark
 set showcmd
+let mapleader=","
+"colorscheme molokai
 
 filetype plugin indent on
 set autochdir
@@ -28,7 +30,7 @@ set undolevels=200
 
 set shortmess=atI
 "set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]  
+set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
 set smartcase
 set shiftwidth=4
@@ -56,13 +58,13 @@ if has("autocmd")
     au FileType helpfile nnoremap <buffer><bs> <c-T>   " Backspace to go back
 
     au FileType mail,tex set textwidth=72
-    au FileType cpp,c,java,sh,perl,php,python,haskell set autoindent
-    au FileType cpp,c,java,sh,perl,php,python,haskell set smartindent
+    au FileType cpp,c,java,sh,perl,php,python,haskell,html,css set autoindent
+    au FileType cpp,c,java,sh,perl,php,python,haskell,html,css set smartindent
     au FileType cpp,c,java,sh,perl,php,python set cindent
     au FileType python set foldmethod=indent
     au FileType python set textwidth=79  " PEP-8 friendly
     au FileType python inoremap # X#
-    au FileType python set expandtab
+    au FileType python,javascript,html,css set expandtab
     au FileType python set omnifunc=pythoncomplete#Complete
     autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
     autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
@@ -72,3 +74,28 @@ if has("autocmd")
     au BufNewFile,BufRead  *.pls    set syntax=dosini
     au BufNewFile,BufRead  modprobe.conf    set syntax=modconf
 endif
+
+call pathogen#runtime_append_all_bundles()
+
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_auto_completion_start_length = 3
+let g:neocomplcache_manual_completion_start_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+if !exists('g:neocomplcache_keyword_patterns')
+    let g:neocomplcache_keyword_patterns = {}
+endif
+let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+let g:C_MapLeader  = ','
+
