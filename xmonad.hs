@@ -84,12 +84,12 @@ evHook (ClientMessageEvent _ _ _ dpy win typ dat) = do
 evHook _ = return $ All True
 
 main = do
-    xmobar <- spawnPipe ( "/home/fpletz/bin/xmobar" )
+    xmobar <- spawnPipe ( "/home/fpletz/.cabal/bin/xmobar" )
     xmonad $ myConfig xmobar
 
 myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
        { borderWidth        = 1
-       , terminal           = "urxvtcd"
+       , terminal           = "urxvt"
        , workspaces         = ["sh", "code", "www", "im", "@" ]
                               ++ map show [6 .. 8 :: Int]
                               ++ ["m"]
@@ -141,6 +141,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. shiftMask, xK_Left ), sendMessage $ Swap L)
       , ((modm .|. shiftMask, xK_Up   ), sendMessage $ Swap U)
       , ((modm .|. shiftMask, xK_Down ), sendMessage $ Swap D)
+
+      , ((0            , 0x1008ff41), spawn "mplayer /home/fpletz/Downloads/alarm/alarm1.wav")
       ]
 
     myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
