@@ -84,7 +84,7 @@ evHook (ClientMessageEvent _ _ _ dpy win typ dat) = do
 evHook _ = return $ All True
 
 main = do
-    xmobar <- spawnPipe ( "/home/fpletz/.cabal/bin/xmobar" )
+    xmobar <- spawnPipe ( "xmobar" )
     xmonad $ myConfig xmobar
 
 myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
@@ -119,7 +119,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. shiftMask, xK_b),   withFocused toggleBorder)
 
       -- lock the screen with xtrlock
-      , ((modm .|. shiftMask, xK_l), spawn "xtrlock")
+      , ((modm .|. shiftMask, xK_l), spawn "xlock")
+      , ((0, 0x1008ff2d), spawn "xlock")
 
       -- some programs to start with keybindings.
       , ((modm .|. shiftMask, xK_f), spawn "iceweasel")
@@ -131,6 +132,13 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. controlMask, xK_x), xmonadPrompt defaultXPConfig)
       , ((modm, xK_x), runOrRaisePrompt defaultXPConfig)
       --, ((modm, xK_s), scratchpadSpawnAction defaultConfig)
+      
+      , ((0, 0x1008ff12), spawn "amixer sset 'PCM' 0%")
+      , ((0, 0x1008ff11), spawn "amixer sset 'PCM' 5%-")
+      , ((0, 0x1008ff13), spawn "amixer sset 'PCM' 5%+")
+      , ((modm, 0x1008ff12), spawn "amixer sset 'Master' 0%")
+      , ((modm, 0x1008ff11), spawn "amixer sset 'Master' 5%-")
+      , ((modm, 0x1008ff13), spawn "amixer sset 'Master' 5%+")
 
       -- window navigation keybindings.
       , ((modm,               xK_Right), sendMessage $ Go R)
@@ -142,7 +150,11 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. shiftMask, xK_Up   ), sendMessage $ Swap U)
       , ((modm .|. shiftMask, xK_Down ), sendMessage $ Swap D)
 
-      , ((0            , 0x1008ff41), spawn "mplayer /home/fpletz/Downloads/alarm/alarm1.wav")
+      -- alarm
+      , ((0            , 0x1008ff41), spawn "aplay /home/fpletz/augustiner.wav")
+      , ((modm         , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm1.wav")
+      , ((controlMask  , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm2.wav")
+      , ((shiftMask    , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm0.wav")
       ]
 
     myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $

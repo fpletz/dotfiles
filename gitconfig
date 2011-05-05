@@ -25,8 +25,14 @@
 [pack]
     threads = 2
 
-[url "git@github.com:fpletz/"]
+[url "git://gitorious.org/"]
+    insteadOf = gitorious:
+[url "git@gitorious.org:"]
+    pushInsteadOf = gitorious:
+[url "git://github.com/"]
     insteadOf = github:
+[url "git@github.com:"]
+    pushInsteadOf = github:
 
 [web]
     browser = /usr/bin/chromium-browser

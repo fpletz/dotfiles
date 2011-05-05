@@ -16,5 +16,5 @@ Config { font = "-*-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<fc=#666666>[</fc>%cpu%<fc=#666666>]=[</fc><fc=#cc1>%memory%</fc><fc=#666666>|</fc><fc=#ee10ee>%swap%</fc><fc=#666666>]=[</fc>%eth0%<fc=#666666>]=[</fc>%wlan0% %wlan0wi%<fc=#666666>]=></fc>}{ %StdinReader% <fc=#666666><=[</fc><fc=#ee9a00>%date%</fc><fc=#666666>]=[</fc>%battery%<fc=#666666>]</fc>"
+       , template = "<fc=#666666>[</fc>%cpu%<fc=#666666>]=[</fc><fc=#cc1>%memory%</fc><fc=#666666>|</fc><fc=#ee10ee>%swap%</fc><fc=#666666>]=[</fc>%eth0%<fc=#666666>]=[</fc>%wlan0%<fc=#666666>]=></fc>}{ %StdinReader% <fc=#666666><=[</fc><fc=#ee9a00>%date%</fc><fc=#666666>]=[</fc>%battery%<fc=#666666>]</fc>"
        }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #xcompmgr &
-xrdb -load $HOME/.Xdefaults &
+#xrdb -load $HOME/.Xdefaults &
 
 xset dpms force on &
 #xset s off
