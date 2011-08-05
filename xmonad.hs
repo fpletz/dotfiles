@@ -28,12 +28,14 @@ import XMonad.Prompt
 import XMonad.Prompt.Ssh
 import XMonad.Prompt.XMonad
 import XMonad.Prompt.RunOrRaise
+import XMonad.Prompt.Theme
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.UpdatePointer
 
 import XMonad.Util.Run
 import XMonad.Util.Scratchpad
+import XMonad.Util.Themes
 
 import XMonad.Actions.NoBorders
 import XMonad.Actions.DynamicWorkspaces
@@ -124,7 +126,6 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
 
       -- some programs to start with keybindings.
       , ((modm .|. shiftMask, xK_f), spawn "iceweasel")
-      , ((modm .|. shiftMask, xK_g), spawn "/home/fpletz/gajim/launch.sh")
       , ((modm .|. shiftMask, xK_m), spawn "claws-mail")
 
       -- prompts
@@ -132,6 +133,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. controlMask, xK_x), xmonadPrompt defaultXPConfig)
       , ((modm, xK_x), runOrRaisePrompt defaultXPConfig)
       --, ((modm, xK_s), scratchpadSpawnAction defaultConfig)
+      , ((modm .|. controlMask, xK_t), themePrompt defaultXPConfig)
+
       
       , ((0, 0x1008ff12), spawn "amixer sset 'PCM' 0%")
       , ((0, 0x1008ff11), spawn "amixer sset 'PCM' 5%-")
@@ -155,6 +158,10 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm         , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm1.wav")
       , ((controlMask  , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm2.wav")
       , ((shiftMask    , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm0.wav")
+
+      -- display
+      , ((0             , 0x1008ff59), spawn "xrandr --output VGA1 --auto && xrandr --output VGA1 --right-of LVDS1")
+      , ((shiftMask     , 0x1008ff59), spawn "xrandr --output VGA1 --off")
       ]
 
     myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -198,7 +205,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
                        }
 
     myLayouts = avoidStruts $ smartBorders
-           -- $ onWorkspace "im" (IM (1%6) (Role "roster"))
+              $ onWorkspace "im" (IM (1%6) (Role "roster"))
               $ onWorkspaces ["www","@","m"] (Full ||| tabbedLayout)
               $ (dwmLayout $ tiled ||| Mirror tiled) ||| Full ||| gimpLayout
             where
@@ -207,7 +214,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
                  delta   = 3/100
                  ratio   = 1/2
 
-                 myTheme = defaultTheme
+                 myTheme = theme smallClean -- defaultTheme
                  dwmLayout = dwmStyle shrinkText myTheme
                  tabbedLayout = tabbedBottomAlways shrinkText myTheme
                  gimpLayout = combineTwoP (TwoPane 0.04 0.82) (tabbedLayout) (Full) (Not (Role "gimp-toolbox"))
