@@ -44,7 +44,6 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Layout.WindowArranger
 
 import System.IO
-import System ( getArgs )
 
 import XMonad.Hooks.ManageHelpers
 import Control.Monad
@@ -135,13 +134,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       --, ((modm, xK_s), scratchpadSpawnAction defaultConfig)
       , ((modm .|. controlMask, xK_t), themePrompt defaultXPConfig)
 
-      
-      , ((0, 0x1008ff12), spawn "amixer sset 'PCM' 0%")
-      , ((0, 0x1008ff11), spawn "amixer sset 'PCM' 5%-")
-      , ((0, 0x1008ff13), spawn "amixer sset 'PCM' 5%+")
-      , ((modm, 0x1008ff12), spawn "amixer sset 'Master' 0%")
-      , ((modm, 0x1008ff11), spawn "amixer sset 'Master' 5%-")
-      , ((modm, 0x1008ff13), spawn "amixer sset 'Master' 5%+")
+      , ((0, 0x1008ff12), spawn "amixer sset 'Master' toggle")
+      , ((0, 0x1008ff11), spawn "amixer sset 'Master' 5%-")
+      , ((0, 0x1008ff13), spawn "amixer sset 'Master' 5%+")
 
       -- window navigation keybindings.
       , ((modm,               xK_Right), sendMessage $ Go R)
@@ -160,8 +155,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((shiftMask    , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm0.wav")
 
       -- display
-      , ((0             , 0x1008ff59), spawn "xrandr --output VGA1 --auto && xrandr --output VGA1 --right-of LVDS1")
+      , ((0             , 0x1008ff59), spawn "xrandr --output LVDS1 --auto && xrandr --output VGA1 --auto && xrandr --output VGA1 --right-of LVDS1")
       , ((shiftMask     , 0x1008ff59), spawn "xrandr --output VGA1 --off")
+      , ((controlMask   , 0x1008ff59), spawn "xrandr --output LVDS1 --off")
       ]
 
     myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -191,9 +187,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
                                         else xmobarColor "#777" "" wsId
                        , ppSep             = xmobarColor "#666" "" "]["
                        , ppUrgent	   = xmobarColor "#fff" "" . \wsId -> wsId ++ "*"
-                       , ppTitle           = shorten 45
+                       , ppTitle           = shorten 45 . (\s -> s ++ " ")
                        , ppWsSep           = xmobarColor "#666" "" "|"
-                       , ppLayout          = xmobarColor "#15d" "" . (\x -> pad $ case x of
+                       , ppLayout          = xmobarColor "#15d" "" . (\x -> case x of
                                                 "Full"                 -> "F"
                                                 "DwmStyle Tall"        -> "DT"
                                                 "DwmStyle Mirror Tall" -> "DMT"
@@ -206,7 +202,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
 
     myLayouts = avoidStruts $ smartBorders
               $ onWorkspace "im" (IM (1%6) (Role "roster"))
-              $ onWorkspaces ["www","@","m"] (Full ||| tabbedLayout)
+              $ onWorkspace "www" tabbedLayout
+              $ onWorkspaces ["@","m"] (Full ||| tabbedLayout)
               $ (dwmLayout $ tiled ||| Mirror tiled) ||| Full ||| gimpLayout
             where
                  tiled   = Tall nmaster delta ratio

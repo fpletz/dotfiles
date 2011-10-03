@@ -21,7 +21,7 @@ fbsetbg -l &
 
 # systray
 trayer --edge top --align right --SetDockType true --SetPartialStrut true \
- --expand true --widthtype percent --width 15 --transparent true \
+ --expand true --widthtype percent --width 10 --transparent true \
  --tint 0x202020 --height 12 &
 
 #x-terminal-emulator &
