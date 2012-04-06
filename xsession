@@ -27,7 +27,7 @@ trayer --edge top --align right --SetDockType true --SetPartialStrut true \
 #x-terminal-emulator &
 
 if [ -e /etc/debian_version ] ; then
-	exec xmonad
+	exec /home/fpletz/.cabal/bin/xmonad
 else
 	export WINDOW_MANAGER=xmonad
 	exec gnome-session

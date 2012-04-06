@@ -23,6 +23,7 @@ import XMonad.Layout.Reflect
 import XMonad.Layout.DwmStyle
 import XMonad.Layout.TwoPane
 import XMonad.Layout.ComboP
+import XMonad.Layout.LayoutHints
 
 import XMonad.Prompt
 import XMonad.Prompt.Ssh
@@ -85,7 +86,7 @@ evHook (ClientMessageEvent _ _ _ dpy win typ dat) = do
 evHook _ = return $ All True
 
 main = do
-    xmobar <- spawnPipe ( "xmobar" )
+    xmobar <- spawnPipe ( "/home/fpletz/bin/xmobar" )
     xmonad $ myConfig xmobar
 
 myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
@@ -125,7 +126,6 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
 
       -- some programs to start with keybindings.
       , ((modm .|. shiftMask, xK_f), spawn "iceweasel")
-      , ((modm .|. shiftMask, xK_m), spawn "claws-mail")
 
       -- prompts
       , ((modm .|. shiftMask, xK_s), sshPrompt defaultXPConfig)
@@ -134,6 +134,10 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       --, ((modm, xK_s), scratchpadSpawnAction defaultConfig)
       , ((modm .|. controlMask, xK_t), themePrompt defaultXPConfig)
 
+      , ((modm, 0x1008ff12), spawn "/home/fpletz/bin/paselect")
+      , ((modm .|. shiftMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect paneeel.local")
+      , ((modm .|. controlMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect wall-eee")
+      , ((modm, 0x1008ff12), spawn "/home/fpletz/bin/paselect")
       , ((0, 0x1008ff12), spawn "amixer sset 'Master' toggle")
       , ((0, 0x1008ff11), spawn "amixer sset 'Master' 5%-")
       , ((0, 0x1008ff13), spawn "amixer sset 'Master' 5%+")
@@ -158,6 +162,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((0             , 0x1008ff59), spawn "xrandr --output LVDS1 --auto && xrandr --output VGA1 --auto && xrandr --output VGA1 --right-of LVDS1")
       , ((shiftMask     , 0x1008ff59), spawn "xrandr --output VGA1 --off")
       , ((controlMask   , 0x1008ff59), spawn "xrandr --output LVDS1 --off")
+
+      --, ((modm,                xK_m    ), viewEmptyWorkspace)
+      --, ((modm .|. shiftMask,  xK_m    ), tagToEmptyWorkspace)
       ]
 
     myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -177,7 +184,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
             , className   =? "Claws-mail"         --> doShift "@"
             ]
             ++ [ className =? c --> doFloat | c <- myFloats ])
-      where myFloats = ["Volume", "XClock", "Network-admin", "frame", "MPlayer", "Pinentry-gtk-2", "Wicd-client.py"]
+      where myFloats = ["Volume", "XClock", "Network-admin", "frame", "MPlayer", "mplayer2", "mplayer", "Pinentry-gtk-2", "Wicd-client.py"]
 
     myPP h = defaultPP { ppCurrent         = xmobarColor "#cc0000" ""
                        , ppVisible         = xmobarColor "#a00000" ""

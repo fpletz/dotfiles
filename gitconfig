@@ -23,7 +23,7 @@
     enabled = true
 
 [pack]
-    threads = 2
+    threads = 8
 
 [url "git://gitorious.org/"]
     insteadOf = gitorious:

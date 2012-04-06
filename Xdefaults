@@ -1,8 +1,9 @@
-Urxvt*depth: 32
-URxvt*background: rgba:0000/0000/0000/9999
+URxvt*depth: 32
+URxvt*background: rgba:0000/0000/0000/cccc
 URxvt*foreground: rgba:dddd/dddd/dddd/ffff
 URxvt*scrollBar: False
-URxvt*font: -*-fixed-*-r-*-*-14-110-*-*-*-*-*-*
+!URxvt*font: -*-fixed-*-r-*-*-14-110-*-*-*-*-*-*
+URxvt*font: xft:Terminus:pixelsize=14
 URxvt*saveLines: 2000
 URxvt*perl-ext-common: default,matcher
 URxvt*urlLauncher: x-www-browser
@@ -10,3 +11,5 @@ URxvt*colorUL: #86a2be
 URxvt.matcher.button: 1
 URxvt.underlineURLs:   true
 URxvt*urgentOnBell: true
+#XLock*foreground: white
+#XLock*background: black
