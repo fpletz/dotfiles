@@ -1,8 +1,6 @@
 import XMonad
 import XMonad.Operations
 
-import Graphics.X11.Xlib
-
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Ratio ((%))
@@ -85,11 +83,9 @@ evHook (ClientMessageEvent _ _ _ dpy win typ dat) = do
 
 evHook _ = return $ All True
 
-main = do
-    xmobar <- spawnPipe ( "/home/fpletz/bin/xmobar" )
-    xmonad $ myConfig xmobar
+main = xmonad myConfig
 
-myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
+myConfig = withUrgencyHook NoUrgencyHook $ defaultConfig
        { borderWidth        = 1
        , terminal           = "urxvt"
        , workspaces         = ["sh", "code", "www", "im", "@" ]
@@ -99,8 +95,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
        , normalBorderColor  = "#ccc"
        , focusedBorderColor = "#05c"
        , focusFollowsMouse  = True
-       , logHook            = (dynamicLogWithPP $ myPP h) >>
-				updatePointer (Relative 0.5 0.5)
+       , logHook            = dynamicLogString myPP >>= xmonadPropLog
        , keys               = \c -> myKeys c `M.union` keys defaultConfig c
        , mouseBindings      = myMouseBindings
        , manageHook         = manageDocks <+> manageHook defaultConfig <+> myManageHook
@@ -120,9 +115,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
 
       , ((modm .|. shiftMask, xK_b),   withFocused toggleBorder)
 
-      -- lock the screen with xtrlock
-      , ((modm .|. shiftMask, xK_l), spawn "xlock")
-      , ((0, 0x1008ff2d), spawn "xlock")
+      -- lock the screen
+      , ((modm .|. shiftMask, xK_l), spawn "/home/fpletz/bin/lock.sh")
+      , ((0, 0x1008ff2d), spawn "/home/fpletz/bin/lock.sh")
 
       -- some programs to start with keybindings.
       , ((modm .|. shiftMask, xK_f), spawn "iceweasel")
@@ -135,9 +130,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. controlMask, xK_t), themePrompt defaultXPConfig)
 
       , ((modm, 0x1008ff12), spawn "/home/fpletz/bin/paselect")
-      , ((modm .|. shiftMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect paneeel.local")
-      , ((modm .|. controlMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect wall-eee")
-      , ((modm, 0x1008ff12), spawn "/home/fpletz/bin/paselect")
+      , ((modm .|. shiftMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect paneeel")
+      , ((modm .|. controlMask, 0x1008ff12), spawn "/home/fpletz/bin/paselect iris")
       , ((0, 0x1008ff12), spawn "amixer sset 'Master' toggle")
       , ((0, 0x1008ff11), spawn "amixer sset 'Master' 5%-")
       , ((0, 0x1008ff13), spawn "amixer sset 'Master' 5%+")
@@ -152,14 +146,8 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
       , ((modm .|. shiftMask, xK_Up   ), sendMessage $ Swap U)
       , ((modm .|. shiftMask, xK_Down ), sendMessage $ Swap D)
 
-      -- alarm
-      , ((0            , 0x1008ff41), spawn "aplay /home/fpletz/augustiner.wav")
-      , ((modm         , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm1.wav")
-      , ((controlMask  , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm2.wav")
-      , ((shiftMask    , 0x1008ff41), spawn "aplay /home/fpletz/Downloads/alarm/alarm0.wav")
-
       -- display
-      , ((0             , 0x1008ff59), spawn "xrandr --output LVDS1 --auto && xrandr --output VGA1 --auto && xrandr --output VGA1 --right-of LVDS1")
+      , ((0             , 0x1008ff59), spawn "xrandr --output LVDS1 --auto && xrandr --output VGA1 --auto && xrandr --output VGA1 --above LVDS1")
       , ((shiftMask     , 0x1008ff59), spawn "xrandr --output VGA1 --off")
       , ((controlMask   , 0x1008ff59), spawn "xrandr --output LVDS1 --off")
 
@@ -184,9 +172,9 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
             , className   =? "Claws-mail"         --> doShift "@"
             ]
             ++ [ className =? c --> doFloat | c <- myFloats ])
-      where myFloats = ["Volume", "XClock", "Network-admin", "frame", "MPlayer", "mplayer2", "mplayer", "Pinentry-gtk-2", "Wicd-client.py"]
+      where myFloats = ["Volume", "XClock", "Network-admin", "frame", "MPlayer", "mplayer2", "mplayer", "mpv", "Pinentry-gtk-2", "Wicd-client.py"]
 
-    myPP h = defaultPP { ppCurrent         = xmobarColor "#cc0000" ""
+    myPP = defaultPP { ppCurrent         = xmobarColor "#cc0000" ""
                        , ppVisible         = xmobarColor "#a00000" ""
                        , ppHiddenNoWindows = \wsId ->
                                     if (reads wsId :: [(Int, String)]) == []
@@ -204,14 +192,14 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
                                                 "combining Tabbed Bottom Simplest and Full with TwoPane using Not (Role \"gimp-toolbox\")" -> "G"
                                                 _                      -> x)
                        , ppOrder           = reverse
-                       , ppOutput          = hPutStrLn h
                        }
 
     myLayouts = avoidStruts $ smartBorders
+              $ onWorkspaces ["sh", "code"] baseLayouts
               $ onWorkspace "im" (IM (1%6) (Role "roster"))
               $ onWorkspace "www" tabbedLayout
               $ onWorkspaces ["@","m"] (Full ||| tabbedLayout)
-              $ (dwmLayout $ tiled ||| Mirror tiled) ||| Full ||| gimpLayout
+              $ baseLayouts ||| gimpLayout
             where
                  tiled   = Tall nmaster delta ratio
                  nmaster = 1
@@ -220,6 +208,7 @@ myConfig h = withUrgencyHook NoUrgencyHook $ defaultConfig
 
                  myTheme = theme smallClean -- defaultTheme
                  dwmLayout = dwmStyle shrinkText myTheme
+                 baseLayouts = (dwmLayout tiled ||| Mirror tiled) ||| Full
                  tabbedLayout = tabbedBottomAlways shrinkText myTheme
                  gimpLayout = combineTwoP (TwoPane 0.04 0.82) (tabbedLayout) (Full) (Not (Role "gimp-toolbox"))
 

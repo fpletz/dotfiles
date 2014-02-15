@@ -1,87 +1,121 @@
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+
+Bundle 'sjl/splice.vim.git'
+Bundle 'tpope/vim-fugitive'
+Bundle 'mhinz/vim-signify'
+let g:signify_vcs_list = [ 'git', 'hg' ]
+let g:signify_sign_add               = '+'
+let g:signify_sign_change            = '!'
+let g:signify_sign_delete            = '✗'
+let g:signify_sign_delete_first_line = '✗'
+
+Bundle 'tpope/vim-speeddating'
+Bundle 'tpope/vim-eunuch'
+Bundle 'tpope/vim-commentary'
+Bundle 'tpope/vim-endwise'
+Bundle 'mbbill/undotree'
+
+Bundle 'kien/ctrlp.vim'
+let g:ctrlp_extensions = ['mixed']
+let g:ctrlp_cmd = 'CtrlPMixed'
+
+Bundle 'bling/vim-airline'
+let g:airline_theme='bubblegum'
+let g:airline#extensions#tabline#enabled = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_right_sep = '«'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+Bundle 'scrooloose/nerdtree'
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+Bundle 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled=1
+
 set nocompatible
-"set background=dark
-set showcmd
-let mapleader=","
-"colorscheme molokai
+set mouse=a
+
+if has("gui_running")
+   " Remove Toolbar
+   set guioptions-=T
+   set guifont=Droid\ Sans\ Mono\ 10
+endif
+
+" Easy split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+set background=dark
+colorscheme xoria256
+
+syntax on
 
 filetype plugin indent on
-set autochdir
-set backspace=indent,eol,start
 set directory=~/.vim/tmp
-set iskeyword+=_,$,@,%,#
-set mouse=a
+set autochdir
 set noerrorbells
+
+set wildmenu
+set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.DS_Store,*.db
 
-" ui
-set cursorcolumn
-set cursorline
+set laststatus=2
+
 set incsearch
 set hlsearch
 set ignorecase
-set laststatus=2
 set lazyredraw
 set novisualbell
 set number
 set ruler
-set scrolloff=5
+set scrolloff=3
 set ttyfast
 set undolevels=200
-
-set shortmess=atI
-"set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+set updatecount=50
+set showmatch matchtime=3
 
 set smartcase
 set shiftwidth=4
 set softtabstop=4
 set tabstop=8
 set bs=2
+set autoindent
+set expandtab
+set smarttab
 
-" cursor keys are evil, disable them to force learning hjkl
-inoremap <Left>  <NOP>
-inoremap <Right> <NOP>
-inoremap <Up>    <NOP>
-inoremap <Down>  <NOP>
+au FileType helpfile set nonumber      " no line numbers when viewing help
+au FileType helpfile nnoremap <buffer><cr> <c-]>   " Enter selects subject
+au FileType helpfile nnoremap <buffer><bs> <c-T>   " Backspace to go back
 
-" remove ALL auto-commands so there are no dupes
-autocmd!
+set textwidth=79
+au FileType mail,tex set textwidth=72
 
-syntax on
-
-if has("autocmd")
-    " Restore cursor position
-    au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
-    au FileType helpfile set nonumber      " no line numbers when viewing help
-    au FileType helpfile nnoremap <buffer><cr> <c-]>   " Enter selects subject
-    au FileType helpfile nnoremap <buffer><bs> <c-T>   " Backspace to go back
-
-    au FileType mail,tex set textwidth=72
-    au FileType cpp,c,java,sh,perl,php,python,haskell,html,css set autoindent
-    au FileType cpp,c,java,sh,perl,php,python,haskell,html,css set smartindent
-    au FileType cpp,c,java,sh,perl,php,python set cindent
-    au FileType python set foldmethod=indent
-    au FileType python set textwidth=79  " PEP-8 friendly
-    au FileType python inoremap # X#
-    au FileType python,javascript,html,css set expandtab
-    au FileType python set omnifunc=pythoncomplete#Complete
-    autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-    autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-
-    au BufWritePost   *.sh             !chmod +x %
-
-    au BufNewFile,BufRead  *.pls    set syntax=dosini
-    au BufNewFile,BufRead  modprobe.conf    set syntax=modconf
-endif
-
-let g:C_MapLeader  = ','
+set smartindent
+set cindent
 
 augroup filetypedetect
     au! BufRead,BufNewFile *.pp     setfiletype puppet
 augroup END
-
-augroup Programming
+augroup puppet
   autocmd!
   autocmd BufWritePost *.pp !puppet parser validate <afile>
+  autocmd BufWritePost *.pp !puppet-lint <afile>
 augroup END
+
+autocmd FileType ruby,puppet,yaml,json set shiftwidth=2
+
+highlight TrailWhitespace ctermbg=red guibg=red
+autocmd Syntax * syn match TrailWhitespace /\s\+$\| \+\ze\t/

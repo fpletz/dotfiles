@@ -1,15 +1,266 @@
+! choose color scheme to use in terminals
+#define use_xoria256_terminal_color_scheme
+!#define use_zenburn_terminal_color_scheme
+!#define use_tomorrow_terminal_color_scheme
+
 URxvt*depth: 32
-URxvt*background: rgba:0000/0000/0000/cccc
-URxvt*foreground: rgba:dddd/dddd/dddd/ffff
+!URxvt*background: rgba:0000/0000/0000/cccc
+!URxvt*foreground: rgba:dddd/dddd/dddd/ffff
+!URxvt.cursorColor    : #dd4010
+!URxvt.cursorColor2   : #fff
+URxvt.pointerBlank   : true
 URxvt*scrollBar: False
 !URxvt*font: -*-fixed-*-r-*-*-14-110-*-*-*-*-*-*
-URxvt*font: xft:Terminus:pixelsize=14
-URxvt*saveLines: 2000
-URxvt*perl-ext-common: default,matcher
+URxvt*font: xft:Terminus:pixelsize=15:antialias=false
+!URxvt*font: xft:Inconsolata:pixelsize=18
+URxvt*saveLines: 8192
+URxvt*perl-ext-common: default,matcher,url-picker
 URxvt*urlLauncher: x-www-browser
-URxvt*colorUL: #86a2be
+URxvt.keysym.CM-u:    perl:url-picker
+URxvt.url-picker.order: descending
+!URxvt*colorUL: #86a2be
 URxvt.matcher.button: 1
-URxvt.underlineURLs:   true
+URxvt.underlineURLs: false
 URxvt*urgentOnBell: true
-#XLock*foreground: white
-#XLock*background: black
+URxvt.borderless: true
+
+XLock*foreground: white
+XLock*background: black
+
+! Xft settings {{{
+Xft.dpi: 96
+Xft.antialias: true
+Xft.hinting  : true
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+Xft.rgba     : rgb
+! }}}
+
+
+!-----------------------------------------------------------------------------
+! xoria256 terminal color scheme
+! http://snk.tuxfamily.org/log/xoria256-terminal-color-scheme.html
+#ifdef use_xoria256_terminal_color_scheme
+
+!black.normal : xoria256.LineNr.guibg
+!black.bright : black.normal.rgb - 8
+#define Ansi_0_Color #121212
+#define Ansi_8_Color #0a0a0a
+
+!red.normal : red.bright.r - 8
+!red.bright : xoria256.Special.guifg
+#define Ansi_1_Color #d78787
+#define Ansi_9_Color #df8787
+
+!green.normal : green.bright.g - 8
+!green.bright : xoria256.PreProc.guifg
+#define Ansi_2_Color #afd787
+#define Ansi_10_Color #afdf87
+
+!yellow.normal : yellow.bright.rg - 8
+!yellow.bright : xoria256.Special.guifg
+#define Ansi_3_Color #f7f7af
+#define Ansi_11_Color #ffffaf
+
+!blue.normal : blue.bright.b - 8
+!blue.bright : xoria256.Statement.guifg
+#define Ansi_4_Color #87afd7
+#define Ansi_12_Color #87afdf
+
+!magenta.normal : magenta.bright.rb - 8
+!magenta.bright : xoria256.Identifier.guifg
+#define Ansi_5_Color #d7afd7
+#define Ansi_13_Color #dfafdf
+
+!cyan.normal : cyan.bright.gb - 8
+!cyan.bright : green.bright + blue.bright
+#define Ansi_6_Color #afd7d7
+#define Ansi_14_Color #afdfdf
+
+!white.normal : white.bright.rgb - 8
+!white.bright : xoria256.Folded.guifg
+#define Ansi_7_Color #e6e6e6
+#define Ansi_15_Color #eeeeee
+
+!bold : xoria256.Type.guifg
+!underline : xoria256.htmlValue.guifg
+#define Bold_Color #afafdf
+#define Underline_Color #dfdfaf
+
+!foreground : xoria256.Normal.guifg
+!background : xoria256.Normal.guibg
+!cursorColor : xoria256.Cursor.guibg
+#define Foreground_Color #d0d0d0
+#define Background_Color rgba:1c1c/1c1c/1c1c/cccc
+#define Cursor_Color #ffaf00
+
+#endif
+!-----------------------------------------------------------------------------
+
+!-----------------------------------------------------------------------------
+! Zenburn terminal color scheme
+! http://snk.tuxfamily.org/log/zenburn-terminal-color-scheme.html
+#ifdef use_zenburn_terminal_color_scheme
+
+!BLK Cursor
+#define Ansi_0_Color #000d18
+#define Ansi_8_Color #000d18
+
+!RED Tag
+#define Ansi_1_Color #e89393
+#define Ansi_9_Color #e89393
+
+!GRN SpecialKey
+#define Ansi_2_Color #9ece9e
+#define Ansi_10_Color #9ece9e
+
+!YEL Keyword
+#define Ansi_3_Color #f0dfaf
+#define Ansi_11_Color #f0dfaf
+
+!BLU Number
+#define Ansi_4_Color #8cd0d3
+#define Ansi_12_Color #8cd0d3
+
+!MAG Precondit
+#define Ansi_5_Color #c0bed1
+#define Ansi_13_Color #c0bed1
+
+!CYN Float
+#define Ansi_6_Color #dfaf8f
+#define Ansi_14_Color #dfaf8f
+
+!WHT Search
+#define Ansi_7_Color #efefef
+#define Ansi_15_Color #efefef
+
+!FMT Include, StatusLine, ErrorMsg
+#define Bold_Color #ffcfaf
+#define Underline_Color #ccdc90
+#define Italic_Color #80d4aa
+
+!TXT Normal, Normal, Cursor
+#define Foreground_Color #dcdccc
+#define Background_Color #1f1f1f
+#define Cursor_Color #8faf9f
+
+#endif
+!-----------------------------------------------------------------------------
+
+!-----------------------------------------------------------------------------
+! Tomorrow terminal color scheme
+! http://snk.tuxfamily.org/log/tomorrow-terminal-color-scheme.html
+#ifdef use_tomorrow_terminal_color_scheme
+
+! BLK
+#define Ansi_0_Color #000000
+#define Ansi_8_Color #666666
+
+! RED
+! TomorrowNightEighties.t_red
+#define Ansi_1_Color #f2777a
+#define Ansi_9_Color Ansi_1_Color
+
+! GRN
+! TomorrowNightEighties.t_green
+#define Ansi_2_Color #99cc99
+#define Ansi_10_Color Ansi_2_Color
+
+! YEL
+! TomorrowNight.t_orange
+#define Ansi_3_Color #de935f
+! TomorrowNight.t_yellow
+#define Ansi_11_Color #f0c674
+
+! BLU
+! TomorrowNight.t_blue
+#define Ansi_4_Color #81a2be
+#define Ansi_12_Color Ansi_4_Color
+
+! MAG
+! TomorrowNightEighties.t_purple
+#define Ansi_5_Color #cc99cc
+#define Ansi_13_Color Ansi_5_Color
+
+! CYN
+! TomorrowNightEighties.t_aqua(hue,value) + TomorrowNight.t_aqua(saturation)
+#define Ansi_6_Color #94CCCC
+#define Ansi_14_Color Ansi_6_Color
+
+! WHT
+! TomorrowNightEighties.t_selection
+#define Ansi_7_Color #515151
+! TomorrowNightEighties.t_current_line
+#define Ansi_15_Color #393939
+
+! FMT
+#define Bold_Color Ansi_11_Color
+#define Underline_Color Ansi_6_Color
+
+! TXT
+! TomorrowNightEighties.tForeground_Color
+#define Foreground_Color #cccccc
+! TomorrowNightEighties.tBackground_Color
+#define Background_Color #2d2d2d
+#define Cursor_Color #aeafad
+
+#endif
+!-----------------------------------------------------------------------------
+
+#ifndef Bold_Color
+#define Bold_Color Ansi_3_Color
+#endif
+
+#ifndef Italic_Color
+#define Italic_Color Ansi_13_Color
+#endif
+
+#ifndef Underline_Color
+#define Underline_Color Ansi_6_Color
+#endif
+
+URxvt*color0 : Ansi_0_Color
+URxvt*color1 : Ansi_1_Color
+URxvt*color2 : Ansi_2_Color
+URxvt*color3 : Ansi_3_Color
+URxvt*color4 : Ansi_4_Color
+URxvt*color5 : Ansi_5_Color
+URxvt*color6 : Ansi_6_Color
+URxvt*color7 : Ansi_7_Color
+URxvt*color8 : Ansi_8_Color
+URxvt*color9 : Ansi_9_Color
+URxvt*color10 : Ansi_10_Color
+URxvt*color11 : Ansi_11_Color
+URxvt*color12 : Ansi_12_Color
+URxvt*color13 : Ansi_13_Color
+URxvt*color14 : Ansi_14_Color
+URxvt*color15 : Ansi_15_Color
+URxvt*colorBD : Bold_Color
+URxvt*colorIT : Italic_Color
+URxvt*colorUL : Underline_Color
+URxvt*foreground : Foreground_Color
+URxvt*background : Background_Color
+URxvt*cursorColor : Cursor_Color
+
+XTerm*color0 : Ansi_0_Color
+XTerm*color1 : Ansi_1_Color
+XTerm*color2 : Ansi_2_Color
+XTerm*color3 : Ansi_3_Color
+XTerm*color4 : Ansi_4_Color
+XTerm*color5 : Ansi_5_Color
+XTerm*color6 : Ansi_6_Color
+XTerm*color7 : Ansi_7_Color
+XTerm*color8 : Ansi_8_Color
+XTerm*color9 : Ansi_9_Color
+XTerm*color10 : Ansi_10_Color
+XTerm*color11 : Ansi_11_Color
+XTerm*color12 : Ansi_12_Color
+XTerm*color13 : Ansi_13_Color
+XTerm*color14 : Ansi_14_Color
+XTerm*color15 : Ansi_15_Color
+XTerm*colorBD : Bold_Color
+XTerm*colorIT : Italic_Color
+XTerm*colorUL : Underline_Color
+XTerm*foreground : Foreground_Color
+XTerm*background : Background_Color
+XTerm*cursorColor : Cursor_Color
